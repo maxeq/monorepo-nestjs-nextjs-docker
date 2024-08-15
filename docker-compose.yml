@@ -1,0 +1,31 @@
+version: "3"
+services:
+
+
+  nextjs-application:
+    container_name: nextjs-application
+    build:
+      context: .
+      dockerfile: nextjs-application/Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+
+  mono-app-1:
+    container_name: mono-app-1
+    build:
+      context: .
+      dockerfile: nest-mono-applications/Dockerfile
+      args:
+        - APP=mono-app-1
+    restart: always
+    ports:
+      - 3001:3000
+    environment:
+      DATABASE_URL: "postgresql://postgres:adminus@postgres-db:5432/postgres?schema=public"
+    depends_on:
+    - postgres
+
+
+volumes:
+  pgdata:
