@@ -1,31 +1,63 @@
-version: "3"
+version: "3"  # Рекомендуется обновить версию на 3.8, чтобы использовать новые возможности, такие как develop/watch
+
 services:
-
-
-  nextjs-application:
-    container_name: nextjs-application
-    build:
-      context: .
-      dockerfile: nextjs-application/Dockerfile
-    restart: always
-    ports:
-      - 3000:3000
 
   mono-app-1:
     container_name: mono-app-1
     build:
       context: .
-      dockerfile: nest-mono-applications/Dockerfile
+      dockerfile: nest-mono-applications/mono-app-1/Dockerfile
       args:
         - APP=mono-app-1
+    command: npm run start:dev
     restart: always
     ports:
       - 3001:3000
     environment:
       DATABASE_URL: "postgresql://postgres:adminus@postgres-db:5432/postgres?schema=public"
     depends_on:
-    - postgres
+      - postgres
+    develop:
+      watch:
+        - action: sync
+          path: ./nest-mono-applications
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
 
+  nextjs-application:
+    container_name: nextjs-application
+    build:
+      context: .
+      dockerfile: nextjs-application/Dockerfile
+    command: npm run dev
+    restart: always
+    ports:
+      - 3000:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./nextjs-application
+          target: /usr/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminus
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:
