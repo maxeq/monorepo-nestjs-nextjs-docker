@@ -3,12 +3,12 @@ version: "3"  # Рекомендуется обновить версию на 3.
 services:
 
   mono-app-1:
-    container_name: mono-app-1
+    container_name: nest-app-1
     build:
       context: .
-      dockerfile: nest-mono-applications/mono-app-1/Dockerfile
+      dockerfile: nest-mono-applications/nest-app-1/Dockerfile
       args:
-        - APP=mono-app-1
+        - APP=nest-app-1
     command: npm run start:dev
     restart: always
     ports:
@@ -21,7 +21,7 @@ services:
       watch:
         - action: sync
           path: ./nest-mono-applications
-          target: /usr/src/app
+          target: /usr/nest/app
           ignore:
             - node_modules/
         - action: rebuild
