@@ -15,4 +15,9 @@ export class AuthService {
     // instead of the user object
     return result;
   }
+
+
+  async validateUser(username: string, password: string) {
+    
+  }
 }
