@@ -1,0 +1,60 @@
+version: "3.9"  # Updated to 3.8 to use new features like develop/watch
+services:
+  nextjs:
+    container_name: nextjs
+    build:
+      context: .
+      dockerfile: nextjs/Dockerfile
+    command: npm run dev
+    restart: always
+    ports:
+      - "3000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: ./nextjs/app
+          target: /nextjs/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json 
+
+  nest-app-1:
+    container_name: nest-app-1
+    build:
+      context: .
+      dockerfile: nest/nest-app-1/Dockerfile
+      args:
+        - APP=nest-app-1
+    command: npm run start:dev
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:adminus@postgres-db:5432/postgres?schema=public"
+    depends_on:
+      - postgres
+    develop:
+      watch:
+        - action: sync
+          path: ./nest/nest-app-1
+          target: /nest/nest-app-1 
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./nest/nest-app-1/package.json
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminus
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
