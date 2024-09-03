@@ -8,7 +8,7 @@ WORKDIR /nextjs
 COPY /nextjs/package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy the entire project to the working directory
 COPY nextjs/ .

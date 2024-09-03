@@ -5,7 +5,7 @@ import { ForbiddenException, Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Role, User } from "@prisma/client";
 import { PrismaService } from "@prisma/prisma.service";
-import { genSaltSync, hashSync } from "bcrypt";
+import { genSaltSync, hashSync } from "bcryptjs";
 import { Cache } from "cache-manager";
 
 @Injectable()

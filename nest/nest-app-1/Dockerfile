@@ -15,7 +15,7 @@ RUN npm install -g @nestjs/cli
 COPY nest/${APP}/package*.json ./
 
 # Устанавливаем зависимости для разработки
-RUN npm ci
+RUN npm install
 
 # Копируем все файлы приложения
 COPY nest/${APP} .   

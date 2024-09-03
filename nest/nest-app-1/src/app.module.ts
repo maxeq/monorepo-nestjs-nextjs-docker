@@ -11,7 +11,10 @@ import { UserModule } from "./user/user.module.js";
     UserModule,
     PrismaModule,
     AuthModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ".env",
+    }),
   ],
   providers: [
     {
