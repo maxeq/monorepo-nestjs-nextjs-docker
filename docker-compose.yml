@@ -1,4 +1,4 @@
-version: "3.9"  # Updated to 3.8 to use new features like develop/watch
+version: "3.9" # Updated to 3.8 to use new features like develop/watch
 services:
   nextjs:
     container_name: nextjs
@@ -17,7 +17,7 @@ services:
           ignore:
             - node_modules/
         - action: rebuild
-          path: ./package.json 
+          path: ./package.json
 
   nest-app-1:
     container_name: nest-app-1
@@ -38,7 +38,7 @@ services:
       watch:
         - action: sync
           path: ./nest/nest-app-1
-          target: /nest/nest-app-1 
+          target: /nest/nest-app-1
           ignore:
             - node_modules/
         - action: rebuild

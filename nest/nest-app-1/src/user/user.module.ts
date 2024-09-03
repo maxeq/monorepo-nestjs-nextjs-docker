@@ -4,9 +4,9 @@ import { UserService } from "./user.service";
 import { UserController } from "./user.controller";
 
 @Module({
-	providers: [UserService],
-	exports: [UserService],
-	controllers: [UserController],
-	imports: [CacheModule.register()],
+  providers: [UserService],
+  exports: [UserService],
+  controllers: [UserController],
+  imports: [CacheModule.register()],
 })
 export class UserModule {}

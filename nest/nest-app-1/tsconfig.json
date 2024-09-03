@@ -6,7 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
+    "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -19,8 +19,13 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@prisma": ["src/prisma"],
+      "@prisma/*": ["src/prisma/*"],
       "@user": ["src/user"],
       "@user/*": ["src/user/*"],
+      "@common": ["libs/common/src"],
+      "@common/*": ["libs/common/src/*"],
+      "@auth": ["src/auth"],
+      "@auth/*": ["src/auth/*"]
     }
   }
 }
