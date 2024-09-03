@@ -1,18 +1,35 @@
-version: "3"  # Рекомендуется обновить версию на 3.8, чтобы использовать новые возможности, такие как develop/watch
-
+version: "3.9"  # Updated to 3.8 to use new features like develop/watch
 services:
+  nextjs:
+    container_name: nextjs
+    build:
+      context: .
+      dockerfile: nextjs/Dockerfile
+    command: npm run dev
+    restart: always
+    ports:
+      - "3000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: ./nextjs/app
+          target: /nextjs/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json 
 
-  mono-app-1:
+  nest-app-1:
     container_name: nest-app-1
     build:
       context: .
-      dockerfile: nest-mono-applications/nest-app-1/Dockerfile
+      dockerfile: nest/nest-app-1/Dockerfile
       args:
         - APP=nest-app-1
     command: npm run start:dev
     restart: always
     ports:
-      - 3001:3000
+      - "3001:3000"
     environment:
       DATABASE_URL: "postgresql://postgres:adminus@postgres-db:5432/postgres?schema=public"
     depends_on:
@@ -20,32 +37,12 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./nest-mono-applications
-          target: /usr/nest/app
+          path: ./nest/nest-app-1
+          target: /nest/nest-app-1 
           ignore:
             - node_modules/
         - action: rebuild
-          path: package.json
-
-  nextjs-application:
-    container_name: nextjs-application
-    build:
-      context: .
-      dockerfile: nextjs-application/Dockerfile
-    command: npm run dev
-    restart: always
-    ports:
-      - 3000:3000
-    develop:
-      watch:
-        - action: sync
-          path: ./nextjs-application
-          target: /usr/app
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: package.json
-
+          path: ./nest/nest-app-1/package.json
 
   postgres:
     image: postgres:16
