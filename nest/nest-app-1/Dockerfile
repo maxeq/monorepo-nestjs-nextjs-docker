@@ -15,14 +15,14 @@ RUN npm install -g @nestjs/cli
 COPY nest/${APP}/package*.json ./
 
 # Устанавливаем зависимости для разработки
-RUN npm install 
+RUN npm ci
 
 # Копируем все файлы приложения
 COPY nest/${APP} .   
 
 # Собираем приложение
 RUN npm run build
-EXPOSE 3001
+
 # production stage
 FROM base AS production 
 ARG APP 

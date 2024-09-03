@@ -8,16 +8,10 @@ WORKDIR /nextjs
 COPY /nextjs/package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy the entire project to the working directory
 COPY nextjs/ .
-
-# List files in the /nextjs/app directory to verify they were copied correctly
-RUN ls -al /nextjs/app
-
-# Build the Next.js application
-RUN npm run build
 
 # Start the application in development mode
 CMD ["npm", "run", "dev"]
