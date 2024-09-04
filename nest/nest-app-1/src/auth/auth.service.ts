@@ -52,14 +52,17 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, agent: string): Promise<Tokens> {
-    const user: User = await this.userService
-      .findOne(dto.email, true)
+    console.log(dto);
+    const user: User = await this.prismaService.user
+      .findUnique({
+        where: { email: dto.email },
+      })
       .catch((err) => {
         this.logger.error(err);
         return null;
       });
     if (!user || !compareSync(dto.password, user.password)) {
-      throw new UnauthorizedException("Не верный логин или пароль");
+      throw new UnauthorizedException("Wrong login or password");
     }
     return this.generateTokens(user, agent);
   }
@@ -83,18 +86,25 @@ export class AuthService {
         userAgent: agent,
       },
     });
-    const token = _token?.token ?? null;
-    return this.prismaService.token.upsert({
-      where: { token },
-      update: {
-        token: v4(),
+
+    // If token is not found, create a new one
+    if (!_token) {
+      return this.prismaService.token.create({
+        data: {
+          token: v4(), // Generate a new token
+          exp: add(new Date(), { months: 1 }),
+          userId,
+          userAgent: agent,
+        },
+      });
+    }
+
+    // Otherwise, update the existing token
+    return this.prismaService.token.update({
+      where: { token: _token.token },
+      data: {
+        token: v4(), // Generate a new token for update
         exp: add(new Date(), { months: 1 }),
-      },
-      create: {
-        token: v4(),
-        exp: add(new Date(), { months: 1 }),
-        userId,
-        userAgent: agent,
       },
     });
   }
