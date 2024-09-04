@@ -10,9 +10,6 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
   ],
-  rules: {
-    quotes: [2, "single", { avoidEscape: true }],
-  },
   root: true,
   env: {
     node: true,
