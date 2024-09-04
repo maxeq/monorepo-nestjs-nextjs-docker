@@ -56,11 +56,13 @@ export class UserService {
       if (!user) {
         return null;
       }
+
       await this.cacheManager.set(
         idOrEmail,
         user,
         convertToSecondsUtil(this.configService.get("JWT_EXP")),
       );
+
       return user;
     }
     return user;

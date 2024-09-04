@@ -1,4 +1,4 @@
-export function convertToSecondsUtil(timeStr: string): number {
+export function convertToSecondsUtil(timeStr: string) {
   if (!isNaN(timeStr as any)) {
     return parseInt(timeStr);
   }
