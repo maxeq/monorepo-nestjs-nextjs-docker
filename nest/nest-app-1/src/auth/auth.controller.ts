@@ -56,6 +56,7 @@ export class AuthController {
     @UserAgent() agent: string,
   ) {
     const tokens = await this.authService.login(dto, agent);
+    console.log(tokens);
     if (!tokens) {
       throw new BadRequestException(
         `Не получается войти с данными ${JSON.stringify(dto)}`,

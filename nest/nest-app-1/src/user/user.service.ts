@@ -16,32 +16,6 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
-  async save(user: Partial<User>) {
-    const hashedPassword = user?.password
-      ? this.hashPassword(user.password)
-      : null;
-    const savedUser = await this.prismaService.user.upsert({
-      where: {
-        email: user.email,
-      },
-      update: {
-        password: hashedPassword ?? undefined,
-        provider: user?.provider ?? undefined,
-        roles: user?.roles ?? undefined,
-        isBlocked: user?.isBlocked ?? undefined,
-      },
-      create: {
-        email: user.email,
-        password: hashedPassword,
-        provider: user?.provider,
-        roles: ["USER"],
-      },
-    });
-    await this.cacheManager.set(savedUser.id, savedUser);
-    await this.cacheManager.set(savedUser.email, savedUser);
-    return savedUser;
-  }
-
   async findOne(idOrEmail: string, isReset = false): Promise<User> {
     if (isReset) {
       await this.cacheManager.del(idOrEmail);
@@ -66,6 +40,32 @@ export class UserService {
       return user;
     }
     return user;
+  }
+
+  async save(user: Partial<User>) {
+    const hashedPassword = user?.password
+      ? this.hashPassword(user.password)
+      : null;
+    const savedUser = await this.prismaService.user.upsert({
+      where: {
+        email: user.email,
+      },
+      update: {
+        password: hashedPassword ?? undefined,
+        provider: user?.provider ?? undefined,
+        roles: user?.roles ?? undefined,
+        isBlocked: user?.isBlocked ?? undefined,
+      },
+      create: {
+        email: user.email,
+        password: hashedPassword,
+        provider: user?.provider,
+        roles: ["USER"],
+      },
+    });
+    await this.cacheManager.set(savedUser.id, savedUser);
+    await this.cacheManager.set(savedUser.email, savedUser);
+    return savedUser;
   }
 
   async delete(id: string, user: JwtPayload) {

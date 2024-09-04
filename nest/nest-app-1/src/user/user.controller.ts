@@ -41,7 +41,6 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Put()
   async updateUser(@Body() body: Partial<User>) {
-    console.log(body, "body");
     const user = await this.userService.save(body);
     return new UserResponse(user);
   }

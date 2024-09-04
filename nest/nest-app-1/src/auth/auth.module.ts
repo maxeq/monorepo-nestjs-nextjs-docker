@@ -18,5 +18,6 @@ import { HttpModule } from "@nestjs/axios";
     UserModule,
     HttpModule,
   ],
+  exports: [JwtModule, AuthService],
 })
 export class AuthModule {}
