@@ -1,5 +1,5 @@
 import { JwtPayload } from "@auth/interfaces";
-
+import { CurrentUser } from "@common/decorators";
 import {
   Body,
   ClassSerializerInterceptor,
@@ -14,7 +14,6 @@ import {
 import { User } from "@prisma/client";
 import { UserResponse } from "./responses";
 import { UserService } from "./user.service";
-import { CurrentUser } from "@common/decorators";
 
 @Controller("user")
 export class UserController {
@@ -42,6 +41,7 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Put()
   async updateUser(@Body() body: Partial<User>) {
+    console.log(body, "body");
     const user = await this.userService.save(body);
     return new UserResponse(user);
   }

@@ -21,13 +21,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
+    console.log(payload);
     const user: User = await this.userService
       .findOne(payload.id)
       .catch((err) => {
         this.logger.error(err);
         return null;
       });
-    console.log(user);
     if (!user || user.isBlocked) {
       throw new UnauthorizedException();
     }
