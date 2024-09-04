@@ -43,7 +43,7 @@ export class AuthController {
     const user = await this.authService.register(dto);
     if (!user) {
       throw new BadRequestException(
-        `Не получается зарегистрировать пользователя с данными ${JSON.stringify(dto)}`,
+        `Cannot register user with this data ${JSON.stringify(dto)}`,
       );
     }
     return new UserResponse(user);

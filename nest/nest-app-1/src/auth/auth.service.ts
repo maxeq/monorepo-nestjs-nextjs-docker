@@ -37,17 +37,14 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto) {
-    const user: User = await this.userService
-      .findOne(dto.email)
-      .catch((err) => {
-        this.logger.error(err);
-        return null;
-      });
-    if (user) {
-      throw new ConflictException(
-        "Пользователь с таким email уже зарегистрирован",
-      );
+    const existingUser = await this.prismaService.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException("Email is already registered");
     }
+
     return this.userService.save(dto).catch((err) => {
       this.logger.error(err);
       return null;
