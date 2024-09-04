@@ -4,7 +4,7 @@
     {
       "singleQuote": true,
       "parser": "flow",
-      "endOfLine": "lf"
+      "endOfLine": "auto"
     }
   ]
 }
