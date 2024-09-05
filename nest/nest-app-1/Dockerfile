@@ -25,7 +25,7 @@ RUN npm run build
 
 # production stage
 FROM base AS production 
-ARG APP 
+ARG APP
 ARG NODE_ENV=production 
 ENV NODE_ENV=${NODE_ENV} 
 WORKDIR /nest/${APP}
