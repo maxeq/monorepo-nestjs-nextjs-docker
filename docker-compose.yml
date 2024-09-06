@@ -18,6 +18,14 @@ services:
             - node_modules/
         - action: rebuild
           path: ./package.json
+    volumes:
+      - ./nextjs:/nextjs
+      - ./nextjs/app:/nextjs/app
+      - /nextjs/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
 
   nest-app-1:
     container_name: nest-app-1
