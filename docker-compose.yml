@@ -1,4 +1,4 @@
-version: "3.9" # Updated to 3.8 to use new features like develop/watch
+version: "3.9"
 services:
   nextjs:
     container_name: nextjs
@@ -9,6 +9,16 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./nextjs:/nextjs
+      - ./nextjs/app:/nextjs/app
+      - /nextjs/node_modules
+    networks:
+      - app-network
     develop:
       watch:
         - action: sync
@@ -18,14 +28,6 @@ services:
             - node_modules/
         - action: rebuild
           path: ./package.json
-    volumes:
-      - ./nextjs:/nextjs
-      - ./nextjs/app:/nextjs/app
-      - /nextjs/node_modules
-    environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
 
   nest-app-1:
     container_name: nest-app-1
@@ -40,8 +42,17 @@ services:
       - "3001:3000"
     environment:
       DATABASE_URL: "postgresql://postgres:adminus@postgres-db:5432/postgres?schema=public"
+      GOOGLE_CLIENT_ID: "test"
+      GOOGLE_CLIENT_SECRET: "test"
+      JWT_SECRET: "asdoasjd9348739"
+      JWT_EXP: "5m"
     depends_on:
       - postgres
+    volumes:
+      - ./nest/nest-app-1:/nest/nest-app-1
+      - /nest/nest-app-1/node_modules
+    networks:
+      - app-network
     develop:
       watch:
         - action: sync
@@ -60,9 +71,28 @@ services:
       POSTGRES_PASSWORD: adminus
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - "6543:5432" # Порт хоста 6543, порт контейнера 5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - nestjstest_pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    depends_on:
+      - postgres
+    ports:
+      - "5555:80" # Порт хоста 5555, порт контейнера 80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
-  pgdata:
+  nestjstest_pgdata:
