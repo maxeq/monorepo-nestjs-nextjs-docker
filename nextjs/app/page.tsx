@@ -41,7 +41,10 @@ export default function Home() {
     });
 
     const data = await response.json();
-    console.log(data);
+
+    const accessToken = data.accessToken;
+    localStorage.setItem("accessToken", accessToken);
+
     if (response.ok) {
       setMessage(`${JSON.stringify(data, null, 2)}`);
     } else {
